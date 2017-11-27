@@ -1,0 +1,208 @@
+<html>
+
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <button onclick="refresh()">Refresh</button>
+    <h2 id="amount">Amount: $</h2>
+    <h2>BTC value
+        <input type="text" id="btc_value"></input>
+        <input type="text" id="btc_miner" onchange="calculateBTC(true)"></input>
+        <a id="btc_total"></a>
+    </h2>    
+    <h2>ETH value
+        <input type="text" id="eth_value"></input>
+        <input type="text" id="eth_miner" onchange="calculateETH(true)"></input>
+        <a id="eth_total"></a>
+    </h2>
+    <h2>XMR value
+        <input type="text" id="xmr_value"></input>
+        <input type="text" id="xmr_miner" onchange="calculateXMR(true)"></input>
+        <a id="xmr_total"></a>
+    </h2>
+    <h2>FCN value
+        <input type="text" id="fcn_value"></input>
+        <input type="text" id="fcn_miner" onchange="calculateFCN(true)"></input>
+        <a id="fcn_total"></a>
+    </h2>
+    <h2>ZEC value
+        <input type="text" id="zec_value"></input>
+        <input type="text" id="zec_miner" onchange="calculateZEC(true)"></input>
+        <a id="zec_total"></a>
+    </h2>
+    <h2>BTG value
+        <input type="text" id="btg_value"></input>
+        <input type="text" id="btg_miner" onchange="calculateBTG(true)"></input>
+        <a id="btg_total"></a>
+    </h2>
+    <h2>AEON value
+        <input type="text" id="aeon_value"></input>
+        <input type="text" id="aeon_miner" onchange="calculateAEON(true)"></input>
+        <a id="aeon_total"></a>
+    </h2>
+
+    <script>
+
+        refresh();
+
+        function refreshAmount() {
+            var value = calculateBTC(false) + 
+                calculateAEON(false) +
+                calculateBTG(false) +
+                calculateZEC(false) +
+                calculateETH(false) +
+                calculateFCN(false) +
+                calculateXMR(false);
+            document.getElementById("amount").innerHTML = "Amount: $" + value;
+        }
+
+        function calculateBTC(refresh) {
+            var value = calculateValue(
+                document.getElementById("btc_value").value,
+                document.getElementById("btc_miner").value);
+
+            document.getElementById("btc_total").innerHTML = "$ " + value;
+            if (refresh) {
+                refreshAmount();
+            }
+            return value;
+        }
+
+        function calculateETH(refresh) {
+            var value = calculateValue(
+                document.getElementById("eth_value").value,
+                document.getElementById("eth_miner").value
+            );
+
+            document.getElementById("eth_total").innerHTML = "$ " + value;
+            if (refresh) {
+                refreshAmount();
+            }
+            return value;
+        }
+
+        function calculateXMR(refresh) {
+            var value = calculateValue(
+                document.getElementById("xmr_value").value,
+                document.getElementById("xmr_miner").value
+            );
+
+            document.getElementById("xmr_total").innerHTML = "$ " + value;
+            if (refresh) {
+                refreshAmount();
+            }
+            return value;
+        }
+
+        function calculateFCN(refresh) {
+            var value = calculateValue(
+                document.getElementById("fcn_value").value,
+                document.getElementById("fcn_miner").value
+            );
+
+            document.getElementById("fcn_total").innerHTML = "$ " + value;
+            if (refresh) {
+                refreshAmount();
+            }
+            return value;
+        }
+
+        function calculateZEC(refresh) {
+            var value = calculateValue(
+                document.getElementById("zec_value").value,
+                document.getElementById("zec_miner").value
+            );
+
+            document.getElementById("zec_total").innerHTML = "$ " + value;
+            if (refresh) {
+                refreshAmount();
+            }
+            return value;
+        }
+
+        function calculateBTG(refresh) {
+            var value = calculateValue(
+                document.getElementById("btg_value").value,
+                document.getElementById("btg_miner").value
+            );
+
+            document.getElementById("btg_total").innerHTML = "$ " + value;
+            if (refresh) {
+                refreshAmount();
+            }
+            return value;
+        }
+
+        function calculateAEON(refresh) {
+            var value = calculateValue(
+                document.getElementById("aeon_value").value,
+                document.getElementById("aeon_miner").value
+            );
+
+            document.getElementById("aeon_total").innerHTML = "$ " + value;
+            if (refresh) {
+                refreshAmount();
+            }
+            return value;
+        }
+
+        function calculateValue(value, miner) {
+            return (Number(value.replace(",", "")) * Number(miner.replace(",", "")));
+        }
+
+        function refresh() {
+            $.get("https://www.coingecko.com/en/price_charts/bitcoin/usd", function (response) {
+                var txt = response.substr(response.indexOf("data-price-btc="));
+                txt = txt.substr(txt.indexOf("$") + 1);
+                txt = txt.substr(0, txt.indexOf("</span"));
+                document.getElementById('btc_value').value = txt;
+            });
+
+            $.get("https://www.coingecko.com/en/coins/ethereum", function (response) {
+                var txt = response.substr(response.indexOf("data-price-btc="));
+                txt = txt.substr(txt.indexOf("$") + 1);
+                txt = txt.substr(0, txt.indexOf("</span"));
+                document.getElementById('eth_value').value = txt;
+            });
+
+            $.get("https://www.coingecko.com/en/coins/monero", function (response) {
+                var txt = response.substr(response.indexOf("data-price-btc="));
+                txt = txt.substr(txt.indexOf("$") + 1);
+                txt = txt.substr(0, txt.indexOf("</span"));
+                document.getElementById('xmr_value').value = txt;
+            });
+
+            $.get("https://www.coingecko.com/en/coins/fantomcoin", function (response) {
+                var txt = response.substr(response.indexOf("data-price-btc="));
+                txt = txt.substr(txt.indexOf("$") + 1);
+                txt = txt.substr(0, txt.indexOf("</span"));
+                document.getElementById('fcn_value').value = txt;
+            });
+
+            $.get("https://www.coingecko.com/en/coins/zcash", function (response) {
+                var txt = response.substr(response.indexOf("data-price-btc="));
+                txt = txt.substr(txt.indexOf("$") + 1);
+                txt = txt.substr(0, txt.indexOf("</span"));
+                document.getElementById('zec_value').value = txt;
+            });
+
+            $.get("https://www.coingecko.com/en/coins/bitcoin-gold", function (response) {
+                var txt = response.substr(response.indexOf("data-price-btc="));
+                txt = txt.substr(txt.indexOf("$") + 1);
+                txt = txt.substr(0, txt.indexOf("</span"));
+                document.getElementById('btg_value').value = txt;
+            });
+
+            $.get("https://www.coingecko.com/en/coins/aeon", function (response) {
+                var txt = response.substr(response.indexOf("data-price-btc="));
+                txt = txt.substr(txt.indexOf("$") + 1);
+                txt = txt.substr(0, txt.indexOf("</span"));
+                document.getElementById('aeon_value').value = txt;
+            });
+        }
+    </script>
+</body>
+
+</html>
